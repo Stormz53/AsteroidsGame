@@ -30,6 +30,7 @@ public void draw()
     rock.get(i).getCenterX(),rock.get(i).getCenterY());
     if (d<40)
       rock.remove(i);
+      i--;
   }
   bob.move();
   bob.show();
