@@ -2,6 +2,7 @@
 Spaceship bob = new Spaceship();
 Star [] sue = new Star[350];
 ArrayList <Asteroid> rock = new ArrayList <Asteroid>();
+ArrayList <Bullet> pew = new ArrayList <Bullet>();
 public void setup()
 {
   //your code here
@@ -30,7 +31,6 @@ public void draw()
     rock.get(i).getCenterX(),rock.get(i).getCenterY());
     if (d<40)
       rock.remove(i);
-      i--;
   }
   bob.move();
   bob.show();
@@ -41,9 +41,30 @@ public void draw()
   text(("Y:" + bob.getCenterY()),10,60);
   text(("Xspeed:" + (int)bob.getXspeed()),10,80);
   text(("Yspeed:" + (int)bob.getYspeed()),10,100);
+  
+  for (int i = pew.size()-1; i>=0;i--){
+    pew.get(i).show();
+    pew.get(i).move();
+    pew.get(i).accelerate(2);
+    if (((pew.get(i).myCenterX)==1000 || (pew.get(i).myCenterY) == 1000)||((pew.get(i).myCenterX)==0 || (pew.get(i).myCenterY) == 0)){
+      pew.remove(i);
+      break;
+    }
+    for(int j = rock.size()-1;j>=0;j--){
+      if(dist((float)(pew.get(i).myCenterX),(float)(pew.get(i).myCenterY),
+      (float)(rock.get(j).myCenterX),(float)(rock.get(j).myCenterY)) <=30){
+        pew.remove(i);
+        rock.remove(j);
+        break;
+      }
+    }
+  }
 }
 
 public void keyPressed(){
+  if(key == ' '){
+    pew.add(new Bullet(bob));
+  }
   //turn right
  if(key == 'd'){
    bob.turn(15);
@@ -64,8 +85,8 @@ public void keyPressed(){
   if(key =='h'){
    bob.setXspeed(0);
    bob.setYspeed(0);
-   bob.setCenterX((int)(Math.random()*500));
-   bob.setCenterY((int)(Math.random()*500));
+   bob.setCenterX((int)(Math.random()*1000));
+   bob.setCenterY((int)(Math.random()*1000));
    bob.setPointDirection((int)(Math.random()*360));
  }
 }
